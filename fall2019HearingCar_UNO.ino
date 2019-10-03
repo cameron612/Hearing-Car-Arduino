@@ -45,6 +45,8 @@ int frontSound = 0;
 int backSound = 0;
 void calcDirection();
 
+int lr = 0; //0 meaning both the signals are off, 1 is left on and 2 is right on
+int fb = 0;// 0 meaning bith the signals are off, 1 is the forward signal on and the 2 meaning the back signal is on
 
 /** Sound circuit 
  *  
@@ -182,6 +184,7 @@ void loop(){
     lcd.setCursor(0,0);
     
     frequency = 38500/float(period);//calculate frequency timer rate/period
+    //Serial.print(frequency);
     int freq = frequency;
     determineSound(frequency);
   }
@@ -202,42 +205,50 @@ void calcDirection(int hs){
   rightSound = digitalRead(rightPin);
   frontSound = digitalRead(frontPin);
   backSound = digitalRead(backPin);
-  int lr = 0;
-  int fb = 0;
+  lr = 0; //0 meaning both the signals are off, 1 is left on and 2 is right on
+  fb = 0;// 0 meaning bith the signals are off, 1 is the forward signal on and the 2 meaning the back signal is on
   if(leftSound == HIGH && rightSound == LOW){
     lr = 1;
-    if(frontSound == HIGH && backSound == LOW){
-      fb = 1;
-    }else if (frontSound == LOW && backSound == HIGH){
-      fb = 2;
-    }
+    condition1();
   }else if (leftSound == LOW && rightSound == HIGH){
     lr = 2;
-    if(frontSound == HIGH && backSound == LOW){
-      fb = 1;
-    }else if (frontSound == LOW && backSound == HIGH){
-      fb = 2;
-    }
+    condition1();
   }else if(frontSound == HIGH && backSound == LOW) {
     fb = 1;
-    if (leftSound == HIGH && rightSound == LOW) {
-      lr = 1;
-    } else if(leftSound == LOW && rightSound == HIGH) {
-      lr = 2;
-    }
+    condition2();
   } else if(frontSound == LOW && backSound == HIGH) {
     fb = 2;
-    if (leftSound == HIGH && rightSound == LOW) {
-      lr = 1;
-    } else if(leftSound == LOW && rightSound == HIGH) {
-      lr = 2;
-    }
+    condition2();
   }
   printDirection(fb, lr, hs);
 }
 
+void condition1()
+{
+  if(frontSound == HIGH && backSound == LOW)
+    {
+      fb = 1;
+    }
+    else if (frontSound == LOW && backSound == HIGH)
+    {
+      fb = 2;
+    }
+}
+void condition2()
+{
+   if (leftSound == HIGH && rightSound == LOW)
+    {
+      lr = 1;
+    }
+    else if(leftSound == LOW && rightSound == HIGH)
+    {
+      lr = 2;
+    }
+}
+
 void printDirection(int fb, int lr, int hs) {
   if (hs == 0) {
+    lcd.print("Horn");
   } else if (hs == 1) {
     lcd.print("Siren");
   }
