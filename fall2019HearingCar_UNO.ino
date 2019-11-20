@@ -31,7 +31,7 @@ int timerTol = 10;//timer tolerance- adjust this if you need
 unsigned int ampTimer = 0;
 byte maxAmp = 0;
 byte checkMaxAmp;
-byte ampThreshold = 10;//raise if you have a very noisy signal
+byte ampThreshold = 15;//raise if you have a very noisy signal
 
 //variables for loc detection
 int rightPin = 4;
@@ -193,7 +193,7 @@ void loop(){
 void determineSound(int freq){
   if((freq >= 350 && freq < 600) || (freq >= 120 && freq < 180)){
       calcDirection(0);
-  }else if( freq >= 850 && freq < 1100){
+  }else if( freq >= 950 && freq < 1250){
     calcDirection(1);
   }else{
      Serial.println("Neither");
